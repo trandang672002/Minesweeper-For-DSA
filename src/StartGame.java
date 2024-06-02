@@ -15,6 +15,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 public class StartGame extends JFrame implements ActionListener {
@@ -189,7 +190,13 @@ public class StartGame extends JFrame implements ActionListener {
         if(countClick == numRows*numCols - mineLis.size()){
             gameResult = true;
             //add label for win
+            int yesnopane = JOptionPane.showConfirmDialog(null,"You WIN, try again","You WIN, try again",JOptionPane.YES_NO_OPTION);
             System.out.println("WIN");
+            if(yesnopane == 0){
+                restartgame();
+            }else if(yesnopane == 1 || yesnopane == 2 || yesnopane == -1){
+                System.exit(0);
+            }
         }
     }
 //---------------------------------------------------------------------------------------------------
@@ -212,6 +219,12 @@ public class StartGame extends JFrame implements ActionListener {
 
         gameResult = true;
         //add new panel for lose
+        int yesnopane = JOptionPane.showConfirmDialog(null,"You Lose, try again","You Lose, try again",JOptionPane.YES_NO_OPTION);
+            if(yesnopane == 0){
+                restartgame();
+            }else if(yesnopane == 1 || yesnopane == 2 || yesnopane == -1){
+                System.exit(0);
+            }
         System.out.println("LOSE");
     }
 //---------------------------------------------------------------------------------------------------  

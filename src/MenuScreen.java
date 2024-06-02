@@ -44,8 +44,6 @@ public class MenuScreen extends JFrame implements ActionListener {
 //------Background and Button in Label---------------------------------------------------------------------------------------------------------------------
         titleLabel.setBounds(0,0,Width,Height);
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
-        // titleLabel.setText("Welcome to Minesweeper");
-        // titleLabel.setFont(new java.awt.Font("Time New Roman", java.awt.Font.BOLD, 25));
         titleLabel.setOpaque(true);
         titleLabel.add(startButton);
         titleLabel.add(ExitButton);
