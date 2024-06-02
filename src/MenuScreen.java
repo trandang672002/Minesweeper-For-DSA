@@ -27,11 +27,12 @@ import java.awt.font.*;
 
 public class MenuScreen extends JFrame implements ActionListener {
     JFrame screen = new JFrame("Minesweeper");
-    int TitleSize = 70;
-    int numRows = 8;
-    int numCols = numRows;
-    int Width = numCols*TitleSize; //560
-    int Height = numRows*TitleSize;//560
+    String title = "Minesweeper";
+    public int TitleSize = 70;
+    public int numRows = 8;
+    public int numCols = numRows;
+    public int Width = numCols*TitleSize; //560
+    public int Height = numRows*TitleSize;//560
 
     ImageIcon backgroundImage = new ImageIcon("resources/backgroudgame.jpg");
 
@@ -44,11 +45,10 @@ public class MenuScreen extends JFrame implements ActionListener {
 
     public MenuScreen(){
 //------JFrame----------------------------------------------------------------------------------------------------------------   
-        screen.setSize(Width,Height);
-        screen.setLocationRelativeTo(null);
+        screen.setSize(Width,Height+50);
+      //  screen.setLocationRelativeTo(null);
         screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         screen.setResizable(false);
-        screen.setVisible(true);
         screen.setLayout(new BorderLayout());
         
 //------ContentPane--------------------------------------------------------------------------------------------------------------------   
@@ -78,20 +78,23 @@ public class MenuScreen extends JFrame implements ActionListener {
         ExitButton.setBounds(220,350,100,50);
         ExitButton.addActionListener(this);
         ExitButton.setFocusable(false);
+
+        screen.setVisible(true);
     }
 
     @Override
     public void actionPerformed(java.awt.event.ActionEvent e) {
         if(e.getSource() == startButton) {
             //Start game
-            Menu.setVisible(false);
-
-          }
+            new StartGame(title,numRows,numCols,Width,Height);
+                screen.dispose();
+                
+        }
           
-          if(e.getSource() == ExitButton){
+        if(e.getSource() == ExitButton){
               //exit game
               System.exit(0);
-          }
+        }
           
     } 
 }

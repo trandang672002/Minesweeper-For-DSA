@@ -1,12 +1,21 @@
 package src;
 
+import java.awt.Color;
+
 import javax.swing.JButton;
 
 public class MineSqu extends JButton{
-    int r;
-    int c;
-    public MineSqu(int r, int c){
-        this.r=r;
-        this.c=c;
+
+    int x;
+    int y;
+    public MineSqu(int x, int y){
+        this.x=x;
+        this.y=y;
+        
     }
+
+    public void setTextColor(Color color){
+        setForeground(color);
+    }
+
 }
