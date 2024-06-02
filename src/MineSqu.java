@@ -14,8 +14,5 @@ public class MineSqu extends JButton{
         
     }
 
-    public void setTextColor(Color color){
-        setForeground(color);
-    }
-
+    
 }

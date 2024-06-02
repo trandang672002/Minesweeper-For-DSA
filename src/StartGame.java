@@ -1,16 +1,14 @@
 package src;
 
 import java.awt.BorderLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Random;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
 import javax.swing.ImageIcon;
@@ -19,9 +17,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import javafx.scene.paint.Color;
-
 public class StartGame extends JFrame implements ActionListener {
     private int numRows;
     private int numCols;
@@ -30,6 +25,10 @@ public class StartGame extends JFrame implements ActionListener {
     private String title;
     private MineSqu[][] map;
 
+    int countClick = 0;
+    boolean gameResult = false;
+    int numMines = 12;
+    Random random = new Random();
 
     Container c = getContentPane();
     JPanel MainPanel = new JPanel();
@@ -55,7 +54,6 @@ public class StartGame extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ImageIcon icon = new ImageIcon("resources/bomb.png");
         setIconImage(icon.getImage());
-
         c.add(MainPanel = createMainPanel());
 //---------------------------------------------------------------------------------------------------    
         //Button in control menu
@@ -66,7 +64,6 @@ public class StartGame extends JFrame implements ActionListener {
         Exit.setBounds(60, 10, 40, 20);
         Exit.addActionListener(this);
         Exit.setFocusable(false);
-
 
         setVisible(true);
         
@@ -80,17 +77,17 @@ public class StartGame extends JFrame implements ActionListener {
             for(int y = 0;y < numCols;y++){
 
                 MineSqu SquButton = new MineSqu(x, y);
-
-
                 map[x][y] = SquButton;
-
-                // SquButton.setFocusable(false);
-                // SquButton.setMargin(new Insets(0,12,0,12));
-                // SquButton.setText("1");
+                SquButton.setFocusable(false);
+            
                 SquButton.setFont(new java.awt.Font("Time New Roman", java.awt.Font.PLAIN, 40));
                 SquButton.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent a){
+                        if(gameResult){
+                            return;
+                        }
+
                         MineSqu SquButton = (MineSqu) a.getSource();
                         
                         if (a.getButton() == MouseEvent.BUTTON1){
@@ -101,6 +98,12 @@ public class StartGame extends JFrame implements ActionListener {
                                     checkMine(SquButton.x, SquButton.y);
                                 }
                             }
+                        }else if(a.getButton() == MouseEvent.BUTTON3){
+                            if(SquButton.getText() == "" && SquButton.isEnabled()){
+                                SquButton.setText("F");
+                            }else if(SquButton.getText() == "F"){
+                                SquButton.setText("");
+                            }
                         }
                     }
                 });
@@ -108,26 +111,27 @@ public class StartGame extends JFrame implements ActionListener {
                 
             }
         }
-        //test bomb
-        setMine(2, 2);//test bomb
+        setMine();
     }
+//---------------------------------------------------------------------------------------------------
+    private void setMine(){
 
-    private void setMine( int x, int y){//test bomb
+        mineLis = new ArrayList<MineSqu>();
 
-        mineLis = new ArrayList<MineSqu>();//test bomb
+        int minenow = numMines;
+        while (minenow > 0){
+            int x = random.nextInt(numRows);
+            int y = random.nextInt(numCols);
 
-        mineLis.add(map[2][2]);//test bomb
-        mineLis.add(map[7][2]);
-        mineLis.add(map[5][2]);
-        mineLis.add(map[2][7]);
-        mineLis.add(map[2][3]);
-        mineLis.add(map[3][3]);
-        mineLis.add(map[4][4]);
-        mineLis.add(map[7][7]);
+            MineSqu SquButton = map[x][y];
+            if(!mineLis.contains(SquButton)){
+                mineLis.add(SquButton);
+                minenow -=1;
+            }
+        }
 
-    }//test bomb
-    //test bomb
-
+    }
+//---------------------------------------------------------------------------------------------------
     private void checkMine(int x, int y){
         if (x<0 || x >= numRows || y <0 || y >= numCols){
             return;
@@ -138,6 +142,7 @@ public class StartGame extends JFrame implements ActionListener {
             return;
         }
         a.setEnabled(false);
+        countClick +=1;
         
         int mineFound = 0;
         mineFound += countMine(x-1,y-1);
@@ -153,21 +158,21 @@ public class StartGame extends JFrame implements ActionListener {
 
         if(mineFound > 0){
             a.setText(Integer.toString(mineFound));
-            // if(mineFound == 1){
-            //     a.setTextColor(java.awt.Color.BLUE);
-            // }else if(mineFound == 2){
-            //     a.setTextColor(java.awt.Color.GREEN);
-            // }else if(mineFound == 3){
-            //     a.setTextColor(java.awt.Color.RED);
-            // }else if(mineFound == 4){
-            //     a.setTextColor(java.awt.Color.PINK);
-            // }else if(mineFound == 5){
-            //     a.setTextColor(java.awt.Color.YELLOW);
-            // }else if(mineFound == 6){
-            //     a.setTextColor(java.awt.Color.ORANGE);
-            // }
+             if(mineFound == 1){
+                 a.setForeground(java.awt.Color.BLUE);
+             }else if(mineFound == 2){
+                 a.setForeground(java.awt.Color.GREEN);
+             }else if(mineFound == 3){
+                 a.setForeground(java.awt.Color.RED);
+             }else if(mineFound == 4){
+                 a.setForeground(java.awt.Color.PINK);
+             }else if(mineFound == 5){
+                 a.setForeground(java.awt.Color.YELLOW);
+             }else if(mineFound == 6){
+                 a.setForeground(java.awt.Color.ORANGE);
+             }
         }else{
-            a.setText("");
+            a.setText(" ");
 
             checkMine(x-1, y-1);
             checkMine(x-1, y);
@@ -181,9 +186,13 @@ public class StartGame extends JFrame implements ActionListener {
             checkMine(x+1, y+1);
         }
 
-
+        if(countClick == numRows*numCols - mineLis.size()){
+            gameResult = true;
+            //add label for win
+            System.out.println("WIN");
+        }
     }
-
+//---------------------------------------------------------------------------------------------------
     private int countMine(int x, int y){
 
         if (x<0 || x >= numRows || y <0 || y >= numCols){
@@ -194,12 +203,16 @@ public class StartGame extends JFrame implements ActionListener {
         }
         return 0;
     }
-
+//---------------------------------------------------------------------------------------------------
     private void revealMines(){
         for (int i=0;i < mineLis.size();i++){
             MineSqu tile = mineLis.get(i);
             tile.setText("B");
         }
+
+        gameResult = true;
+        //add new panel for lose
+        System.out.println("LOSE");
     }
 //---------------------------------------------------------------------------------------------------  
     private JPanel createMainPanel() {
@@ -227,14 +240,23 @@ public class StartGame extends JFrame implements ActionListener {
 		panelControl.setBorder(new EmptyBorder(10, 3, 5, 3));
 		panelControl.add(Restart);
         panelControl.add(Exit);
+        panelControl.add(setTextforControlPanel());
 
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(panelControl, BorderLayout.WEST);
 		return panel;
 	}
+
+    private JLabel setTextforControlPanel(){
+        JLabel labelText = new JLabel();
+        labelText.setText("Mines: " + Integer.toString(numMines));
+        return labelText;
+    }
 //---------------------------------------------------------------------------------------------------  
     private void restartgame(){
         MineMap.removeAll();
+        countClick = 0;
+        gameResult = false;
 		MainPanel.add(createGraphicsPanel(), BorderLayout.CENTER);
 		MainPanel.validate();
 		MainPanel.setVisible(true);
