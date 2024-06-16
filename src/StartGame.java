@@ -1,4 +1,6 @@
-package src;
+/* Name: Tran Dang ITITDK20001
+ Purpose: Project for DSA 
+*/
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -26,8 +28,10 @@ public class StartGame extends JFrame implements ActionListener {
     private String title;
     private MineSqu[][] map;
 
+    ImageIcon imageMine = new ImageIcon("resources/bomb.png");
+    
     int countClick = 0;
-    boolean gameResult = false;
+    boolean gameResult = false;  //stop the game when it true
     int numMines = 12;
     Random random = new Random();
 
@@ -49,7 +53,7 @@ public class StartGame extends JFrame implements ActionListener {
         this.title = title;
 
         setTitle(title);
-      //setLocationRelativeTo(null);
+       //setLocationRelativeTo();
         setSize(width,height+50);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,13 +69,11 @@ public class StartGame extends JFrame implements ActionListener {
         Exit.setBounds(60, 10, 40, 20);
         Exit.addActionListener(this);
         Exit.setFocusable(false);
-
         setVisible(true);
         
     }
 //---------------------------------------------------------------------------------------------------   
     private void Mapgenerator(){
-
         MineSqu[][] map = new MineSqu[numRows][numCols];
         this.map=map;
         for(int x = 0;x < numRows;x++){
@@ -79,8 +81,7 @@ public class StartGame extends JFrame implements ActionListener {
 
                 MineSqu SquButton = new MineSqu(x, y);
                 map[x][y] = SquButton;
-                SquButton.setFocusable(false);
-            
+                SquButton.setFocusable(false);         
                 SquButton.setFont(new java.awt.Font("Time New Roman", java.awt.Font.PLAIN, 40));
                 SquButton.addMouseListener(new MouseAdapter() {
                     @Override
@@ -88,9 +89,8 @@ public class StartGame extends JFrame implements ActionListener {
                         if(gameResult){
                             return;
                         }
-
                         MineSqu SquButton = (MineSqu) a.getSource();
-                        
+
                         if (a.getButton() == MouseEvent.BUTTON1){
                             if (SquButton.getText() == ""){
                                 if(mineLis.contains(SquButton)){
@@ -101,8 +101,8 @@ public class StartGame extends JFrame implements ActionListener {
                             }
                         }else if(a.getButton() == MouseEvent.BUTTON3){
                             if(SquButton.getText() == "" && SquButton.isEnabled()){
-                                SquButton.setText("F");
-                            }else if(SquButton.getText() == "F"){
+                                SquButton.setText("X");
+                            }else if(SquButton.getText() == "X"){
                                 SquButton.setText("");
                             }
                         }
@@ -116,9 +116,7 @@ public class StartGame extends JFrame implements ActionListener {
     }
 //---------------------------------------------------------------------------------------------------
     private void setMine(){
-
         mineLis = new ArrayList<MineSqu>();
-
         int minenow = numMines;
         while (minenow > 0){
             int x = random.nextInt(numRows);
@@ -159,19 +157,6 @@ public class StartGame extends JFrame implements ActionListener {
 
         if(mineFound > 0){
             a.setText(Integer.toString(mineFound));
-             if(mineFound == 1){
-                 a.setForeground(java.awt.Color.BLUE);
-             }else if(mineFound == 2){
-                 a.setForeground(java.awt.Color.GREEN);
-             }else if(mineFound == 3){
-                 a.setForeground(java.awt.Color.RED);
-             }else if(mineFound == 4){
-                 a.setForeground(java.awt.Color.PINK);
-             }else if(mineFound == 5){
-                 a.setForeground(java.awt.Color.YELLOW);
-             }else if(mineFound == 6){
-                 a.setForeground(java.awt.Color.ORANGE);
-             }
         }else{
             a.setText(" ");
 
@@ -214,11 +199,11 @@ public class StartGame extends JFrame implements ActionListener {
     private void revealMines(){
         for (int i=0;i < mineLis.size();i++){
             MineSqu tile = mineLis.get(i);
-            tile.setText("B");
+            tile.setText("");
+            tile.setIcon(imageMine);
+            //tile.setText("B");
         }
-
         gameResult = true;
-        //add new panel for lose
         int yesnopane = JOptionPane.showConfirmDialog(null,"You Lose, try again","You Lose, try again",JOptionPane.YES_NO_OPTION);
             if(yesnopane == 0){
                 restartgame();
@@ -230,7 +215,6 @@ public class StartGame extends JFrame implements ActionListener {
 //---------------------------------------------------------------------------------------------------  
     private JPanel createMainPanel() {
 		//game panel
-
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(createGraphicsPanel(), BorderLayout.CENTER);
 		panel.add(createControlPanel(), BorderLayout.NORTH);
@@ -239,8 +223,7 @@ public class StartGame extends JFrame implements ActionListener {
 //---------------------------------------------------------------------------------------------------  
     private JPanel createGraphicsPanel() {
 		//design gameplay background
-        Mapgenerator();
-        
+        Mapgenerator();   
 		MineMap.setLayout(new GridLayout(numRows,numCols,1,1));
         MineMap.setPreferredSize(new Dimension(50, 50));
 		MineMap.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -254,7 +237,6 @@ public class StartGame extends JFrame implements ActionListener {
 		panelControl.add(Restart);
         panelControl.add(Exit);
         panelControl.add(setTextforControlPanel());
-
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(panelControl, BorderLayout.WEST);
 		return panel;
@@ -269,7 +251,7 @@ public class StartGame extends JFrame implements ActionListener {
     private void restartgame(){
         MineMap.removeAll();
         countClick = 0;
-        gameResult = false;
+        gameResult = false;      
 		MainPanel.add(createGraphicsPanel(), BorderLayout.CENTER);
 		MainPanel.validate();
 		MainPanel.setVisible(true);

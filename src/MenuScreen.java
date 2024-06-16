@@ -1,4 +1,6 @@
-package src;
+/* Name: Tran Dang ITITDK20001
+ Purpose: Project for DSA 
+*/
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -18,7 +20,7 @@ public class MenuScreen extends JFrame implements ActionListener {
     public int Width = numCols*TitleSize; //560
     public int Height = numRows*TitleSize;//560
 
-    ImageIcon backgroundImage = new ImageIcon("resources/backgroudgame.jpg");
+    ImageIcon backgroundImage = new ImageIcon("resources/backgroudgame.png");
 
     JLabel titleLabel = new JLabel(backgroundImage);
 
@@ -29,7 +31,7 @@ public class MenuScreen extends JFrame implements ActionListener {
 
     public MenuScreen(){
 //------JFrame----------------------------------------------------------------------------------------------------------------   
-        screen.setSize(Width,Height+50);
+        screen.setSize(Width,Height+50);  //(560,610)
       //  screen.setLocationRelativeTo(null);
         screen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         screen.setResizable(false);
